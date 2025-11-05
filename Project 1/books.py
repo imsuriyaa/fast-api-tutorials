@@ -79,4 +79,11 @@ async def delete_book(book_title: str):
     return BOOKS
 
 
-
+@app.get('/books/fetch-byauthor/')
+async def fetch_author_books(author: str):
+    author_books = []
+    for book in BOOKS:
+        if book.get('author').casefold() == author.casefold():
+            author_books.append(book)
+    return author_books
+    
