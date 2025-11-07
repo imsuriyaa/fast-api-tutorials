@@ -25,9 +25,6 @@ class BookRequest(BaseModel):
         }
     }
 
-
-
-
 class Book:
     id: int
     title: str
