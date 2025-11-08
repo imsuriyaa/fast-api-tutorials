@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 
-SQLALCHEMY_DATABASE_URL = 'sqlite:///./todos.db'
+SQLALCHEMY_DATABASE_URL = 'sqlite:///./todosapp.db'
 
 # creates an engine through which we can interact with SQL DB
 # By setting check_same_thread: False we are allowing multiple threads to interact with the DB
