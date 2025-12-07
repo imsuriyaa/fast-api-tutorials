@@ -3,7 +3,6 @@ import models
 from database import engine
 from routers import auth, todos, admin, users
 
-
 app = FastAPI()
 
 # Create database without writing any SQL query

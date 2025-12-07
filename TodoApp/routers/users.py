@@ -42,8 +42,6 @@ async def get_user(user: user_dependency, db: db_dependency):
     return db.query(Users).filter(Users.id == user.get('id')).first()
 
 
-
-
 @router.put('/change_password', status_code=status.HTTP_204_NO_CONTENT)
 async def change_password(db: db_dependency, user: user_dependency, user_verification: UserVerification):
     
@@ -60,7 +58,6 @@ async def change_password(db: db_dependency, user: user_dependency, user_verific
     
     user_model.hashed_password = bcrypt_context.hash(user_verification.new_password)
     db.commit()
-    # db.refresh(user_model)
 
     return user_model
 
