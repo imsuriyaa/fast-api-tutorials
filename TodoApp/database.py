@@ -3,9 +3,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 
-# SQLALCHEMY_DATABASE_URL = 'sqlite:///./todosapp.db'
+SQLALCHEMY_DATABASE_URL = 'sqlite:///./todosapp.db'
 # SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:Ihave2children&just1wife@localhost/TodoApplicationDatabase'
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:Senthil3%40@localhost:3306/TodoApplicationDatabase"
+# SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:Senthil3%40@localhost:3306/TodoApplicationDatabase"
 
 
 # creates an engine through which we can interact with SQL DB
@@ -20,4 +20,5 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 # Set autocommit & autoflush to False to have a full control over the DB
 SessionLocal = sessionmaker(autocommit = False, autoflush=False, bind=engine)
 
+# Use this base class to register all my models
 Base = declarative_base()
