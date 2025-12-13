@@ -1,12 +1,12 @@
 from fastapi import FastAPI, status
-import models
-from database import engine
-from routers import auth, todos, admin, users
+from .models import Base
+from .database import engine
+from .routers import auth, todos, admin, users
 
 app = FastAPI()
 
 # Create database without writing any SQL query
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
 @app.get('/healthy', status_code=status.HTTP_200_OK)
