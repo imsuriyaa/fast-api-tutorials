@@ -35,7 +35,7 @@ router = APIRouter(
 @router.get('/todo', status_code=status.HTTP_200_OK)
 async def read_all(user: user_dependency, db: db_dependency):
     
-    if user is None or user.get('user_role') != 'admin':
+    if user is None or user.get('role') != 'admin':
         raise HTTPException(status_code=401, detail='Unauthorized')
     
     return db.query(Todos).all()
@@ -45,7 +45,7 @@ async def read_all(user: user_dependency, db: db_dependency):
 @router.delete('/todo/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_todo(user: user_dependency, db: db_dependency, todo_id: int):
     
-    if user is None or user.get('user_role') != 'admin':
+    if user is None or user.get('role') != 'admin':
         raise HTTPException(status_code=401, detail='Unauthorized')
     
     todo_model = db.query(Todos).filter(Todos.id==todo_id).first()
