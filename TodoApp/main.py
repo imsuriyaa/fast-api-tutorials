@@ -1,12 +1,22 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, Request
 from .models import Base
 from .database import engine
 from .routers import auth, todos, admin, users
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
 # Create database without writing any SQL query
 Base.metadata.create_all(bind=engine)
+
+templates = Jinja2Templates(directory="TodoApp/templates")
+app.mount('/static', StaticFiles(directory='TodoApp/static'), name='static')
+
+@app.get('/')
+def test(request: Request):
+    # request is a protocal that we have to follow
+    return templates.TemplateResponse("home.html", {"request": request})
 
 
 @app.get('/healthy', status_code=status.HTTP_200_OK)
