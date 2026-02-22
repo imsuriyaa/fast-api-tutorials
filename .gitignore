@@ -1,0 +1,12 @@
+.venv/
+.env
+__pycache__/
+todosapp.db
+```gitignore
+*.log
+.vscode/
+.idea/
+dist/
+build/
+*.egg-info/
+.DS_Store
