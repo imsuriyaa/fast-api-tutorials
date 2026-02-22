@@ -1,0 +1,15 @@
+Insert a todo:
+insert into todos (title, description, priority, complete) values ('Go to the store', 'Pick up eggs', 1, False);
+
+To print the database in a different format:
+.mode markdown
+.mode column
+.mode box
+.mode table
+
+Select all todos:
+select * from todos;
+
+Delete a todo:
+delete from todos where id = 1;
+

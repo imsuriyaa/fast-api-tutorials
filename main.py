@@ -1,6 +1,12 @@
-def main():
-    print("Hello from fast-api-tutorials!")
+from fastapi import FastAPI
+import models
+from database import engine
+from routers import todos, auth
 
+# Create all the tables in the database
+models.Base.metadata.create_all(bind=engine)
 
-if __name__ == "__main__":
-    main()
+app = FastAPI()
+
+app.include_router(auth.router)
+app.include_router(todos.router)
