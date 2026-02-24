@@ -3,10 +3,18 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///./todosapp.db'
+# SQLALCHEMY_DATABASE_URL = 'mysql+pymysql://root:@localhost:3306/TodoApplicationDatabase'
+
+# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:Senthil3%40@localhost:5432/TodoApplicationDatabase"
 
 # create a database engine - this is what we use to connect to the database
 # multiple threads can access the database at the same time - check_same_thread=False
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
+
+# sqlite only
+# engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False})
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+
 
 # create a database session factory - this is what we use to create sessions to query the database
 # autocommit=False - we need to commit our changes manually

@@ -1,0 +1,2 @@
+install psycopg2-binary for postgresql
+install pymysql for mysql

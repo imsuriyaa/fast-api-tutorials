@@ -29,9 +29,13 @@ class UserPasswordChangeRequest(BaseModel):
     current_password: str
     new_password: str
 
+class UserPhoneNumberChangeRequest(BaseModel):
+    current_phone_number: str
+    new_phone_number: str
+
 
 @router.get('/')
-def read_all_users(user: user_dependency, db: db_dependency):
+def read_user_data(user: user_dependency, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
     
@@ -42,7 +46,8 @@ def read_all_users(user: user_dependency, db: db_dependency):
         'email': user_model.email,
         'first_name': user_model.first_name,
         'last_name': user_model.last_name,
-        'role': user_model.role
+        'role': user_model.role,
+        'phone_number': user_model.phone_number
     }
 
 @router.put('/change-password', status_code=status.HTTP_204_NO_CONTENT)
@@ -60,4 +65,21 @@ def change_password(user: user_dependency, db: db_dependency, user_request: User
     db.commit()
     return
 
+
+@router.put('/change-phone-number', status_code=status.HTTP_204_NO_CONTENT)
+def change_phone_number(user: user_dependency, db: db_dependency, user_request: UserPhoneNumberChangeRequest):
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
+    
+    user_model = db.query(Users).filter(Users.id == user.get('id')).first()
+
+    print(user_model.phone_number)
+
+    if user_request.current_phone_number != user_model.phone_number and user_model.phone_number:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
+    
+    user_model.phone_number = user_request.new_phone_number
+    db.add(user_model)
+    db.commit()
+    return
 

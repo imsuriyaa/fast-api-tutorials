@@ -45,6 +45,7 @@ class CreateUserRequest(BaseModel):
     last_name: str
     password: str = Field(min_length=7)
     role: str = Field(min_length=3)
+    phone_number: str
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -95,7 +96,8 @@ def create_user(db: db_dependency, user: CreateUserRequest):
         last_name=user.last_name,
         hashed_password=bcrypt_context.hash(user.password),
         role=user.role,
-        is_active=True
+        is_active=True,
+        phone_number=user.phone_number
     )
     db.add(create_user_model)
     db.commit()
@@ -103,7 +105,7 @@ def create_user(db: db_dependency, user: CreateUserRequest):
 
 
 @router.post('/token', response_model=TokenResponse)
-def create_user(db: db_dependency, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+def get_access_token(db: db_dependency, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     
     user = authenticate_user(form_data.username, form_data.password, db)
     

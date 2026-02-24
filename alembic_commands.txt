@@ -1,0 +1,25 @@
+uv add alembic
+alembic init <folder_name>
+
+
+Alembic revision - is how we create a migration file where we can add some type of 
+database upgrade or downgrade
+alembic revision -m <message>
+
+
+alembic upgrade <revision>
+alembic downgrade-1
+
+After initialization of Alembic, two items will appear in our directory
+1. alembic.ini
+2. alembic directory
+
+
+1st Step 
+change sqlalchemy.url in alembic.ini file to match the database url in database.py file
+
+2nd Step in alembic/env.py file
+target_metadata = models.Base.metadata
+
+3rd Step - in Terminal
+alembic revision -m "create phone number for user table"
