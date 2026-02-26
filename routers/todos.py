@@ -60,7 +60,7 @@ def read_todo(user: user_dependency, db: db_dependency, todo_id: int = Path(gt=0
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found")
 
 
-@router.put('/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.put('/{todo_id}', status_code=status.HTTP_200_OK)
 def update_todo(user: user_dependency, todo: TodoRequest, db: db_dependency, todo_id: int = Path(gt=0)):
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
@@ -80,7 +80,7 @@ def update_todo(user: user_dependency, todo: TodoRequest, db: db_dependency, tod
     return {"message": "Todo updated successfully"}
         
 
-@router.delete('/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/{todo_id}', status_code=status.HTTP_200_OK)
 def delete_todo(user: user_dependency, db: db_dependency, todo_id: int = Path(gt=0)):
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
