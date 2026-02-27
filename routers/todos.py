@@ -44,9 +44,7 @@ def create_todo(todo: TodoRequest, user: user_dependency, db: db_dependency):
 def read_all_todos(user: user_dependency, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
-    if user.get("role") != "admin":
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
-    todos = db.query(Todos).all()
+    todos = db.query(Todos).filter(Todos.owner_id == user.get("id")).all()
     return todos
 
 @router.get('/{todo_id}', status_code=status.HTTP_200_OK)
