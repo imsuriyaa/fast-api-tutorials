@@ -4,7 +4,9 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from database import Base
 from main import app
-from models import Todos
+from models import Todos, Users
+from routers.auth import bcrypt_context
+
 
 client = TestClient(app)
 
@@ -42,4 +44,22 @@ def test_todo():
         connection.commit()
 
 
+@pytest.fixture
+def test_user():
+    user = Users(
+        username="testuser",
+        email="testuser@test.com",
+        hashed_password=bcrypt_context.hash("testpassword"),
+        first_name="Test",
+        last_name="User",
+        role="admin",
+        phone_number="1234567890"
+    )
+    db = TestingSessionLocal()
+    db.add(user)
+    db.commit()
+    yield db
+    with engine.connect() as connection:
+        connection.execute(text('DELETE FROM users;'))
+        connection.commit()
 
