@@ -119,3 +119,6 @@ def get_access_token(db: db_dependency, form_data: Annotated[OAuth2PasswordReque
 
     return {"access_token": token, "token_type": "bearer"}
 
+
+
+
