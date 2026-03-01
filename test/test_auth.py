@@ -35,6 +35,7 @@ def test_create_access_token():
     assert payload.get("id") == user_id
     assert payload.get("role") == role
 
+# for await operations in pytest package named pytest-asyncio is used (needs to be installed)
 @pytest.mark.asyncio
 async def test_get_current_user():
     token = create_access_token('testuser', 1, 'user', timedelta(minutes=20))

@@ -5,13 +5,14 @@ from pydantic import BaseModel, Field
 from models import Users
 from typing import Annotated
 from database import SessionLocal
-from fastapi import Depends
+from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 # comes with python-multipart package
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from dotenv import load_dotenv
+from fastapi.templating import Jinja2Templates
 
 load_dotenv()
 
@@ -27,6 +28,22 @@ ALGORITHM = os.getenv("ALGORITHM")
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
+
+templates = Jinja2Templates(directory="templates")
+
+# Pages
+
+@router.get('/login-page')
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, 'title': 'FASTAPI Todo - Login'})
+
+
+@router.get('/register-page')
+async def register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request, 'title': 'FASTAPI Todo - Register'})
+
+# EndPoints
+
 
 def get_db():
     db = SessionLocal()
