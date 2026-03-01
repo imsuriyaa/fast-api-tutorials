@@ -1,13 +1,13 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from database import engine, Base
 from routers import todos, auth, users, admin
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
+
 
 # Create all the tables in the database
 Base.metadata.create_all(bind=engine)
 
-templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
 
@@ -16,7 +16,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get('/')
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, 'title': 'FASTAPI Todo - Home'})
+    return RedirectResponse(url="/todos/todo-page", status_code=status.HTTP_302_FOUND)
 
 @app.get("/healthy")
 def health_check():

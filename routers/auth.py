@@ -13,6 +13,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
 from dotenv import load_dotenv
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import RedirectResponse
 
 load_dotenv()
 
@@ -35,6 +36,10 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get('/login-page')
 async def login_page(request: Request):
+    if request.cookies.get('access_token'):
+        user = await get_current_user(request.cookies.get('access_token'))
+        if user:
+            return RedirectResponse(url="/todos/todo-page", status_code=status.HTTP_302_FOUND)
     return templates.TemplateResponse("login.html", {"request": request, 'title': 'FASTAPI Todo - Login'})
 
 

@@ -6,6 +6,7 @@ from database import engine, SessionLocal
 from pydantic import BaseModel, Field
 from starlette.responses import RedirectResponse
 from .auth import get_current_user
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter(
     prefix="/todos",
@@ -22,6 +23,8 @@ def get_db():
 # Depends - it is a dependency injection
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
+
+templates = Jinja2Templates(directory="templates")
 
 
 class TodoRequest(BaseModel):
@@ -53,9 +56,35 @@ async def render_todo_page(request: Request, db: db_dependency):
         return redirect_to_login()
 
 
+
+@router.get('/add-todo-page')
+async def render_add_todo_page(request: Request):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+        if user is None:
+            return redirect_to_login()
+        return templates.TemplateResponse("add-todo.html", {"request": request, "user": user})
+    except:
+        return redirect_to_login()
+
+
+@router.get('/edit-todo-page/{todo_id}')
+async def render_edit_todo_page(db: db_dependency, request: Request, todo_id: int = Path(gt=0)):
+    try:
+        user = await get_current_user(request.cookies.get('access_token'))
+        if user is None:
+            return redirect_to_login()
+        todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+        return templates.TemplateResponse("edit-todo.html", {"request": request, "todo": todo_model, "user": user})
+    except:
+        return redirect_to_login()
+
+
+
+
 ### Endpoints ###
 
-@router.post('/', status_code=status.HTTP_201_CREATED)
+@router.post('/todo', status_code=status.HTTP_201_CREATED)
 def create_todo(todo: TodoRequest, user: user_dependency, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication Failed")
